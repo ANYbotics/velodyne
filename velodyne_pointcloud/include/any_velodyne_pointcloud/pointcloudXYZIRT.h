@@ -1,4 +1,4 @@
-// Copyright (C) 2018, 2019 Kevin Hallenbeck, Joshua Whitley
+// Copyright (C) 2012, 2019 Austin Robot Technology, Jack O'Quin, Joshua Whitley, Sebastian Pütz
 // All rights reserved.
 //
 // Software License Agreement (BSD License 2.0)
@@ -30,43 +30,31 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef VELODYNE_LASERSCAN_VELODYNE_LASERSCAN_H
-#define VELODYNE_LASERSCAN_VELODYNE_LASERSCAN_H
+#ifndef VELODYNE_POINTCLOUD_POINTCLOUDXYZIRT_H
+#define VELODYNE_POINTCLOUD_POINTCLOUDXYZIRT_H
 
-#include <ros/ros.h>
-#include <sensor_msgs/PointCloud2.h>
-#include <sensor_msgs/LaserScan.h>
+#include <any_velodyne_pointcloud/datacontainerbase.h>
+#include <string>
 
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/lock_guard.hpp>
-
-#include <dynamic_reconfigure/server.h>
-#include <velodyne_laserscan/VelodyneLaserScanConfig.h>
-
-namespace velodyne_laserscan
+namespace velodyne_pointcloud
 {
-
-class VelodyneLaserScan
+class PointcloudXYZIRT : public velodyne_rawdata::DataContainerBase
 {
 public:
-  VelodyneLaserScan(ros::NodeHandle &nh, ros::NodeHandle &nh_priv);
+  PointcloudXYZIRT(const double max_range, const double min_range, const std::string& target_frame,
+                  const std::string& fixed_frame, const unsigned int scans_per_block,
+                  boost::shared_ptr<tf::TransformListener> tf_ptr = boost::shared_ptr<tf::TransformListener>());
 
-private:
-  boost::mutex connect_mutex_;
-  void connectCb();
-  void recvCallback(const sensor_msgs::PointCloud2ConstPtr& msg);
+  virtual void newLine();
 
-  ros::NodeHandle nh_;
-  ros::Subscriber sub_;
-  ros::Publisher pub_;
+  virtual void setup(const any_velodyne_msgs::VelodyneScan::ConstPtr& scan_msg);
 
-  VelodyneLaserScanConfig cfg_;
-  dynamic_reconfigure::Server<VelodyneLaserScanConfig> srv_;
-  void reconfig(VelodyneLaserScanConfig& config, uint32_t level);
+  virtual void addPoint(float x, float y, float z, const uint16_t ring, const uint16_t azimuth,
+                        const float distance, const float intensity, const float time);
 
-  unsigned int ring_count_;
+  sensor_msgs::PointCloud2Iterator<float> iter_x, iter_y, iter_z, iter_intensity, iter_time;
+  sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring;
 };
+}  // namespace velodyne_pointcloud
 
-}  // namespace velodyne_laserscan
-
-#endif  // VELODYNE_LASERSCAN_VELODYNE_LASERSCAN_H
+#endif  // VELODYNE_POINTCLOUD_POINTCLOUDXYZIRT_H

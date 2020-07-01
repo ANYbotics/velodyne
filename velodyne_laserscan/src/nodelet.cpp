@@ -33,7 +33,7 @@
 #include <ros/ros.h>
 #include <pluginlib/class_list_macros.h>
 #include <nodelet/nodelet.h>
-#include "velodyne_laserscan/velodyne_laserscan.h"
+#include "any_velodyne_laserscan/velodyne_laserscan.h"
 
 namespace velodyne_laserscan
 {

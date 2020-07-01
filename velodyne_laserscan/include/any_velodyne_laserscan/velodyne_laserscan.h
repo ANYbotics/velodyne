@@ -1,4 +1,4 @@
-// Copyright (C) 2012, 2019 Austin Robot Technology, Jack O'Quin, Joshua Whitley, Sebastian Pütz
+// Copyright (C) 2018, 2019 Kevin Hallenbeck, Joshua Whitley
 // All rights reserved.
 //
 // Software License Agreement (BSD License 2.0)
@@ -30,31 +30,43 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef VELODYNE_POINTCLOUD_POINTCLOUDXYZIRT_H
-#define VELODYNE_POINTCLOUD_POINTCLOUDXYZIRT_H
+#ifndef VELODYNE_LASERSCAN_VELODYNE_LASERSCAN_H
+#define VELODYNE_LASERSCAN_VELODYNE_LASERSCAN_H
 
-#include <velodyne_pointcloud/datacontainerbase.h>
-#include <string>
+#include <ros/ros.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/LaserScan.h>
 
-namespace velodyne_pointcloud
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/lock_guard.hpp>
+
+#include <dynamic_reconfigure/server.h>
+#include <any_velodyne_laserscan/VelodyneLaserScanConfig.h>
+
+namespace velodyne_laserscan
 {
-class PointcloudXYZIRT : public velodyne_rawdata::DataContainerBase
+
+class VelodyneLaserScan
 {
 public:
-  PointcloudXYZIRT(const double max_range, const double min_range, const std::string& target_frame,
-                  const std::string& fixed_frame, const unsigned int scans_per_block,
-                  boost::shared_ptr<tf::TransformListener> tf_ptr = boost::shared_ptr<tf::TransformListener>());
+  VelodyneLaserScan(ros::NodeHandle &nh, ros::NodeHandle &nh_priv);
 
-  virtual void newLine();
+private:
+  boost::mutex connect_mutex_;
+  void connectCb();
+  void recvCallback(const sensor_msgs::PointCloud2ConstPtr& msg);
 
-  virtual void setup(const velodyne_msgs::VelodyneScan::ConstPtr& scan_msg);
+  ros::NodeHandle nh_;
+  ros::Subscriber sub_;
+  ros::Publisher pub_;
 
-  virtual void addPoint(float x, float y, float z, const uint16_t ring, const uint16_t azimuth,
-                        const float distance, const float intensity, const float time);
+  VelodyneLaserScanConfig cfg_;
+  dynamic_reconfigure::Server<VelodyneLaserScanConfig> srv_;
+  void reconfig(VelodyneLaserScanConfig& config, uint32_t level);
 
-  sensor_msgs::PointCloud2Iterator<float> iter_x, iter_y, iter_z, iter_intensity, iter_time;
-  sensor_msgs::PointCloud2Iterator<uint16_t> iter_ring;
+  unsigned int ring_count_;
 };
-}  // namespace velodyne_pointcloud
 
-#endif  // VELODYNE_POINTCLOUD_POINTCLOUDXYZIRT_H
+}  // namespace velodyne_laserscan
+
+#endif  // VELODYNE_LASERSCAN_VELODYNE_LASERSCAN_H

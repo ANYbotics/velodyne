@@ -30,7 +30,7 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "velodyne_driver/time_conversion.hpp"
+#include "any_velodyne_driver/time_conversion.hpp"
 #include <ros/time.h>
 #include <gtest/gtest.h>
 

@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>velodyne_laserscan</name>
+  <name>any_velodyne_laserscan</name>
   <version>1.5.2</version>
   <description>
     Extract a single ring of a Velodyne PointCloud2 and publish it as a LaserScan message
   </description>
-  <maintainer email="josh.whitley@autoware.org">Josh Whitley</maintainer>
+  <maintainer email="ynava@anybotics.com">Yoshua Nava</maintainer>
+  <maintainer email="mwulf@anybotics.com">Maximilian Wulf</maintainer>
+  <author email="ynava@anybotics.com">Yoshua Nava</author>
   <author>Micho Radovnikovich</author>
   <author>Kevin Hallenbeck</author>
   <license>BSD</license>

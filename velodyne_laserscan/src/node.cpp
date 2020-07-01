@@ -31,7 +31,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <ros/ros.h>
-#include "velodyne_laserscan/velodyne_laserscan.h"
+#include "any_velodyne_laserscan/velodyne_laserscan.h"
 
 int main(int argc, char** argv)
 {

@@ -16,7 +16,7 @@
 #include <pluginlib/class_list_macros.h>
 #include <nodelet/nodelet.h>
 
-#include "velodyne_pointcloud/convert.h"
+#include "any_velodyne_pointcloud/convert.h"
 
 namespace velodyne_pointcloud
 {

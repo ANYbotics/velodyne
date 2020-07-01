@@ -30,7 +30,7 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "velodyne_laserscan/velodyne_laserscan.h"
+#include "any_velodyne_laserscan/velodyne_laserscan.h"
 #include <sensor_msgs/point_cloud2_iterator.h>
 
 namespace velodyne_laserscan

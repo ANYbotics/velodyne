@@ -1,4 +1,4 @@
-// Copyright (C) 2009, 2010, 2011, 2012, 2019 Austin Robot Technology, Jack O'Quin, Jesse Vera, Joshua Whitley
+// Copyright (C) 2012 Austin Robot Technology, Jack O'Quin
 // All rights reserved.
 //
 // Software License Agreement (BSD License 2.0)
@@ -30,73 +30,67 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-/** @file
-
-    This class converts raw Velodyne 3D LIDAR packets to PointCloud2.
-
-*/
-
-#ifndef VELODYNE_POINTCLOUD_CONVERT_H
-#define VELODYNE_POINTCLOUD_CONVERT_H
+#ifndef VELODYNE_DRIVER_DRIVER_H
+#define VELODYNE_DRIVER_DRIVER_H
 
 #include <string>
-
 #include <ros/ros.h>
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <diagnostic_updater/publisher.h>
-
-#include <sensor_msgs/PointCloud2.h>
-#include <velodyne_pointcloud/rawdata.h>
-
 #include <dynamic_reconfigure/server.h>
-#include <velodyne_pointcloud/CloudNodeConfig.h>
 
-namespace velodyne_pointcloud
+#include <any_velodyne_driver/input.h>
+#include <any_velodyne_driver/VelodyneNodeConfig.h>
+
+namespace velodyne_driver
 {
-class Convert
+
+class VelodyneDriver
 {
-  public:
-    Convert(
-        ros::NodeHandle node,
-        ros::NodeHandle private_nh,
-        std::string const & node_name = ros::this_node::getName());
-    ~Convert() {}
+public:
+  VelodyneDriver(ros::NodeHandle node,
+                 ros::NodeHandle private_nh,
+                 std::string const & node_name = ros::this_node::getName());
+  ~VelodyneDriver() {}
 
-  private:
-    void callback(velodyne_pointcloud::CloudNodeConfig &config, uint32_t level);
-    void processScan(const velodyne_msgs::VelodyneScan::ConstPtr &scanMsg);
+  bool poll(void);
 
-    boost::shared_ptr<dynamic_reconfigure::Server<velodyne_pointcloud::CloudNodeConfig> > srv_;
+private:
+  // Callback for dynamic reconfigure
+  void callback(any_velodyne_driver::VelodyneNodeConfig &config,
+              uint32_t level);
+  // Callback for diagnostics update for lost communication with vlp
+  void diagTimerCallback(const ros::TimerEvent&event);
 
-    boost::shared_ptr<velodyne_rawdata::RawData> data_;
-    ros::Subscriber velodyne_scan_;
-    ros::Publisher output_;
+  // Pointer to dynamic reconfigure service srv_
+  boost::shared_ptr<dynamic_reconfigure::Server<any_velodyne_driver::VelodyneNodeConfig> > srv_;
 
-    boost::shared_ptr<velodyne_rawdata::DataContainerBase> container_ptr_;
+  // configuration parameters
+  struct
+  {
+    std::string frame_id;            // tf frame ID
+    std::string model;               // device model name
+    int    npackets;                 // number of packets to collect
+    double rpm;                      // device rotation rate (RPMs)
+    int cut_angle;                   // cutting angle in 1/100°
+    double time_offset;              // time in seconds added to each velodyne time stamp
+    bool enabled;                    // polling is enabled
+    bool timestamp_first_packet;
+  }
+  config_;
 
-    boost::mutex reconfigure_mtx_;
+  boost::shared_ptr<Input> input_;
+  ros::Publisher output_;
+  int last_azimuth_;
 
-    /// configuration parameters
-    typedef struct
-    {
-      std::string target_frame;      ///< target frame
-      std::string fixed_frame;       ///< fixed frame
-      bool organize_cloud;           ///< enable/disable organized cloud structure
-      double max_range;              ///< maximum range to publish
-      double min_range;              ///< minimum range to publish
-      uint16_t num_lasers;           ///< number of lasers
-      int npackets;                  ///< number of packets to combine
-    }
-    Config;
-    Config config_;
-    bool first_rcfg_call;
-
-  // diagnostics updater
+  /* diagnostics updater */
+  ros::Timer diag_timer_;
   diagnostic_updater::Updater diagnostics_;
   double diag_min_freq_;
   double diag_max_freq_;
   boost::shared_ptr<diagnostic_updater::TopicDiagnostic> diag_topic_;
 };
-}  // namespace velodyne_pointcloud
 
-#endif  // VELODYNE_POINTCLOUD_CONVERT_H
+}  // namespace velodyne_driver
+
+#endif  // VELODYNE_DRIVER_DRIVER_H

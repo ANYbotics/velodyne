@@ -13,10 +13,10 @@
 
 */
 
-#include "velodyne_pointcloud/convert.h"
+#include "any_velodyne_pointcloud/convert.h"
 
-#include <velodyne_pointcloud/pointcloudXYZIRT.h>
-#include <velodyne_pointcloud/organized_cloudXYZIRT.h>
+#include <any_velodyne_pointcloud/pointcloudXYZIRT.h>
+#include <any_velodyne_pointcloud/organized_cloudXYZIRT.h>
 
 namespace velodyne_pointcloud
 {
@@ -126,7 +126,7 @@ namespace velodyne_pointcloud
   }
 
   /** @brief Callback for raw scan messages. */
-  void Convert::processScan(const velodyne_msgs::VelodyneScan::ConstPtr &scanMsg)
+  void Convert::processScan(const any_velodyne_msgs::VelodyneScan::ConstPtr &scanMsg)
   {
     if (output_.getNumSubscribers() == 0)         // no one listening?
       return;                                     // avoid much work

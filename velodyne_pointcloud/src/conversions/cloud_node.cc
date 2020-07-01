@@ -12,7 +12,7 @@
 */
 
 #include <ros/ros.h>
-#include "velodyne_pointcloud/convert.h"
+#include "any_velodyne_pointcloud/convert.h"
 
 /** Main node entry point. */
 int main(int argc, char **argv)

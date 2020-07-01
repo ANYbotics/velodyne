@@ -42,7 +42,7 @@
 #include <tf/transform_listener.h>
 #include <velodyne_msgs/VelodyneScan.h>
 
-#include "velodyne_driver/driver.h"
+#include "any_velodyne_driver/driver.h"
 
 namespace velodyne_driver
 {
@@ -144,9 +144,8 @@ VelodyneDriver::VelodyneDriver(ros::NodeHandle node,
   private_nh.param("port", udp_port, (int) DATA_PORT_NUMBER);
 
   // Initialize dynamic reconfigure
-  srv_ = boost::make_shared <dynamic_reconfigure::Server<velodyne_driver::
-    VelodyneNodeConfig> > (private_nh);
-  dynamic_reconfigure::Server<velodyne_driver::VelodyneNodeConfig>::
+  srv_ = boost::make_shared <dynamic_reconfigure::Server<any_velodyne_driver::VelodyneNodeConfig> > (private_nh);
+  dynamic_reconfigure::Server<any_velodyne_driver::VelodyneNodeConfig>::
     CallbackType f;
   f = boost::bind (&VelodyneDriver::callback, this, _1, _2);
   srv_->setCallback (f); // Set callback function und call initially
@@ -273,7 +272,7 @@ bool VelodyneDriver::poll(void)
   return true;
 }
 
-void VelodyneDriver::callback(velodyne_driver::VelodyneNodeConfig &config,
+void VelodyneDriver::callback(any_velodyne_driver::VelodyneNodeConfig &config,
               uint32_t level)
 {
   ROS_INFO("Reconfigure Request");

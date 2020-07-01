@@ -33,7 +33,7 @@
 #include <gtest/gtest.h>
 
 #include <ros/package.h>
-#include <velodyne_pointcloud/calibration.h>
+#include <any_velodyne_pointcloud/calibration.h>
 
 #include <string>
 

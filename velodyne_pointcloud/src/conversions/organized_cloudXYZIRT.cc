@@ -1,5 +1,5 @@
 
-#include <velodyne_pointcloud/organized_cloudXYZIRT.h>
+#include <any_velodyne_pointcloud/organized_cloudXYZIRT.h>
 
 namespace velodyne_pointcloud
 {
@@ -33,7 +33,7 @@ OrganizedCloudXYZIRT::OrganizedCloudXYZIRT(
     ++cloud.height;
   }
 
-  void OrganizedCloudXYZIRT::setup(const velodyne_msgs::VelodyneScan::ConstPtr& scan_msg){
+  void OrganizedCloudXYZIRT::setup(const any_velodyne_msgs::VelodyneScan::ConstPtr& scan_msg){
     DataContainerBase::setup(scan_msg);
     iter_x = sensor_msgs::PointCloud2Iterator<float>(cloud, "x");
     iter_y = sensor_msgs::PointCloud2Iterator<float>(cloud, "y");

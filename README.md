@@ -1,4 +1,8 @@
-[![CircleCI](https://circleci.com/gh/ros-drivers/velodyne.svg?style=svg)](https://circleci.com/gh/ros-drivers/velodyne)
+# NOTE: This is a fork from the official repository
+
+**The following changes have been applied on top of ETHZ-ASL main development branch:**
+
+* Added packages the prefix 'any' to prevent collisions with publicly available packages.
 
 Overview
 ========

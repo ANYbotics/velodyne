@@ -36,7 +36,7 @@
  */
 
 #include <ros/ros.h>
-#include "velodyne_driver/driver.h"
+#include "any_velodyne_driver/driver.h"
 
 int main(int argc, char** argv)
 {

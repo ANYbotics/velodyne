@@ -1,7 +1,7 @@
 
 
 
-#include <velodyne_pointcloud/pointcloudXYZIRT.h>
+#include <any_velodyne_pointcloud/pointcloudXYZIRT.h>
 
 namespace velodyne_pointcloud 
 {
@@ -22,7 +22,7 @@ PointcloudXYZIRT::PointcloudXYZIRT(
         iter_ring(cloud, "ring"), iter_intensity(cloud, "intensity"), iter_time(cloud, "time")
     {};
 
-  void PointcloudXYZIRT::setup(const velodyne_msgs::VelodyneScan::ConstPtr& scan_msg){
+  void PointcloudXYZIRT::setup(const any_velodyne_msgs::VelodyneScan::ConstPtr& scan_msg){
     DataContainerBase::setup(scan_msg);
     iter_x = sensor_msgs::PointCloud2Iterator<float>(cloud, "x");
     iter_y = sensor_msgs::PointCloud2Iterator<float>(cloud, "y");

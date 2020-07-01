@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(velodyne_driver)
+cmake_minimum_required(VERSION 2.8.1)
+project(any_velodyne_driver)
 
 # Set minimum C++ standard to C++11
 if (NOT "${CMAKE_CXX_STANDARD_COMPUTED_DEFAULT}")
@@ -16,7 +16,8 @@ set(${PROJECT_NAME}_CATKIN_DEPS
     nodelet
     roscpp
     tf
-    velodyne_msgs)
+    velodyne_msgs
+)
 
 find_package(catkin REQUIRED COMPONENTS ${${PROJECT_NAME}_CATKIN_DEPS} roslint)
 
@@ -49,46 +50,46 @@ install(DIRECTORY launch/
 install(PROGRAMS src/vdump
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-roslint_cpp()
+# roslint_cpp()
 
-if (CATKIN_ENABLE_TESTING)
+# if (CATKIN_ENABLE_TESTING)
 
-  # these dependencies are only needed for unit testing
-  find_package(roslaunch REQUIRED)
-  find_package(rostest REQUIRED)
+#   # these dependencies are only needed for unit testing
+#   find_package(roslaunch REQUIRED)
+#   find_package(rostest REQUIRED)
 
-  # Download packet capture (PCAP) files containing test data.
-  # Store them in devel-space, so rostest can easily find them.
-  catkin_download_test_data(
-    ${PROJECT_NAME}_tests_class.pcap
-    http://download.ros.org/data/velodyne/class.pcap
-    DESTINATION ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/tests
-    MD5 65808d25772101358a3719b451b3d015)
-  catkin_download_test_data(
-    ${PROJECT_NAME}_tests_32e.pcap
-    http://download.ros.org/data/velodyne/32e.pcap
-    DESTINATION ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/tests
-    MD5 e41d02aac34f0967c03a5597e1d554a9)
-  catkin_download_test_data(
-    ${PROJECT_NAME}_tests_vlp16.pcap
-    http://download.ros.org/data/velodyne/vlp16.pcap
-    DESTINATION ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/tests
-    MD5 f45c2bb1d7ee358274e423ea3b66fd73)
+#   # Download packet capture (PCAP) files containing test data.
+#   # Store them in devel-space, so rostest can easily find them.
+#   catkin_download_test_data(
+#     ${PROJECT_NAME}_tests_class.pcap
+#     http://download.ros.org/data/velodyne/class.pcap
+#     DESTINATION ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/tests
+#     MD5 65808d25772101358a3719b451b3d015)
+#   catkin_download_test_data(
+#     ${PROJECT_NAME}_tests_32e.pcap
+#     http://download.ros.org/data/velodyne/32e.pcap
+#     DESTINATION ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/tests
+#     MD5 e41d02aac34f0967c03a5597e1d554a9)
+#   catkin_download_test_data(
+#     ${PROJECT_NAME}_tests_vlp16.pcap
+#     http://download.ros.org/data/velodyne/vlp16.pcap
+#     DESTINATION ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/tests
+#     MD5 f45c2bb1d7ee358274e423ea3b66fd73)
   
-  # unit tests
-  add_rostest(tests/pcap_node_hertz.test)
-  add_rostest(tests/pcap_nodelet_hertz.test)
-  add_rostest(tests/pcap_32e_node_hertz.test)
-  add_rostest(tests/pcap_32e_nodelet_hertz.test)
-  add_rostest(tests/pcap_vlp16_node_hertz.test)
-  add_rostest(tests/pcap_vlp16_nodelet_hertz.test)
+#   # unit tests
+#   add_rostest(tests/pcap_node_hertz.test)
+#   add_rostest(tests/pcap_nodelet_hertz.test)
+#   add_rostest(tests/pcap_32e_node_hertz.test)
+#   add_rostest(tests/pcap_32e_nodelet_hertz.test)
+#   add_rostest(tests/pcap_vlp16_node_hertz.test)
+#   add_rostest(tests/pcap_vlp16_nodelet_hertz.test)
   
-  # parse check all the launch/*.launch files
-  roslaunch_add_file_check(launch)
+#   # parse check all the launch/*.launch files
+#   roslaunch_add_file_check(launch)
 
-  # unit test
-  catkin_add_gtest(time_test tests/timeconversiontest.cpp)
-  target_link_libraries(time_test
-    ${catkin_LIBRARIES}
-    ${Boost_LIBRARIES})
-endif (CATKIN_ENABLE_TESTING)
+#   # unit test
+#   catkin_add_gtest(time_test tests/timeconversiontest.cpp)
+#   target_link_libraries(time_test
+#     ${catkin_LIBRARIES}
+#     ${Boost_LIBRARIES})
+# endif (CATKIN_ENABLE_TESTING)

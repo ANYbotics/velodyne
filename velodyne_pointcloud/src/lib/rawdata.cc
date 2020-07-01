@@ -34,7 +34,7 @@
 #include <ros/package.h>
 #include <angles/angles.h>
 
-#include <velodyne_pointcloud/rawdata.h>
+#include <any_velodyne_pointcloud/rawdata.h>
 
 namespace velodyne_rawdata
 {
@@ -264,7 +264,7 @@ inline float SQR(float val) { return val*val; }
    *  @param pkt raw packet to unpack
    *  @param pc shared pointer to point cloud (points are appended)
    */
-  void RawData::unpack(const velodyne_msgs::VelodynePacket &pkt, DataContainerBase& data, const ros::Time& scan_start_time)
+  void RawData::unpack(const any_velodyne_msgs::VelodynePacket &pkt, DataContainerBase& data, const ros::Time& scan_start_time)
   {
     using velodyne_pointcloud::LaserCorrection;
     ROS_DEBUG_STREAM("Received packet, time: " << pkt.stamp);
@@ -431,7 +431,7 @@ inline float SQR(float val) { return val*val; }
    *  @param pkt raw packet to unpack
    *  @param pc shared pointer to point cloud (points are appended)
    */
-  void RawData::unpack_vlp16(const velodyne_msgs::VelodynePacket &pkt, DataContainerBase& data, const ros::Time& scan_start_time)
+  void RawData::unpack_vlp16(const any_velodyne_msgs::VelodynePacket &pkt, DataContainerBase& data, const ros::Time& scan_start_time)
   {
     float azimuth;
     float azimuth_diff;

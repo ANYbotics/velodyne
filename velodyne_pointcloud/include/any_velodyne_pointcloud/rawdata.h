@@ -50,9 +50,9 @@
 #include <vector>
 
 #include <ros/ros.h>
-#include <velodyne_msgs/VelodyneScan.h>
-#include <velodyne_pointcloud/calibration.h>
-#include <velodyne_pointcloud/datacontainerbase.h>
+#include <any_velodyne_msgs/VelodyneScan.h>
+#include <any_velodyne_pointcloud/calibration.h>
+#include <any_velodyne_pointcloud/datacontainerbase.h>
 
 namespace velodyne_rawdata
 {
@@ -164,7 +164,7 @@ public:
    */
   int setupOffline(std::string calibration_file, double max_range_, double min_range_);
 
-  void unpack(const velodyne_msgs::VelodynePacket& pkt, DataContainerBase& data,
+  void unpack(const any_velodyne_msgs::VelodynePacket& pkt, DataContainerBase& data,
               const ros::Time& scan_start_time);
 
   void setParameters(double min_range, double max_range, double view_direction, double view_width);
@@ -207,7 +207,7 @@ private:
   bool buildTimings();
 
   /** add private function to handle the VLP16 **/
-  void unpack_vlp16(const velodyne_msgs::VelodynePacket& pkt, DataContainerBase& data,
+  void unpack_vlp16(const any_velodyne_msgs::VelodynePacket& pkt, DataContainerBase& data,
                     const ros::Time& scan_start_time);
 };
 

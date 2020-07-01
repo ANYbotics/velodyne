@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(velodyne_laserscan)
+cmake_minimum_required(VERSION 3.5.1)
+project(any_velodyne_laserscan)
 
 # Set minimum C++ standard to C++11
 if (NOT "${CMAKE_CXX_STANDARD_COMPUTED_DEFAULT}")
@@ -58,9 +58,9 @@ install(FILES nodelets.xml
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-roslint_cpp()
+# roslint_cpp()
 
-if (CATKIN_ENABLE_TESTING)
-  add_subdirectory(tests)
-endif()
+# if (CATKIN_ENABLE_TESTING)
+#   add_subdirectory(tests)
+# endif()
 

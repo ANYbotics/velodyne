@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(velodyne_pointcloud)
+cmake_minimum_required(VERSION 3.5.1)
+project(any_velodyne_pointcloud)
 
 # Set minimum C++ standard to C++11
 if (NOT "${CMAKE_CXX_STANDARD_COMPUTED_DEFAULT}")
@@ -17,8 +17,8 @@ set(${PROJECT_NAME}_CATKIN_DEPS
     roslib
     sensor_msgs
     tf
-    velodyne_driver
-    velodyne_msgs
+    any_velodyne_driver
+    any_velodyne_msgs
     dynamic_reconfigure
     diagnostic_updater
 )
@@ -79,8 +79,8 @@ install(DIRECTORY params/
 install(PROGRAMS scripts/gen_calibration.py
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-roslint_cpp()
+# roslint_cpp()
 
-if (CATKIN_ENABLE_TESTING)
-  add_subdirectory(tests)
-endif()
+# if (CATKIN_ENABLE_TESTING)
+#   add_subdirectory(tests)
+# endif()

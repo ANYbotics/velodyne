@@ -1,6 +1,6 @@
 ## PointCloud2 to PCL PointCloud Conversion
 
-Convert `sensor_msgs::PointCloud2` objects coming from the velodyne_pointcloud driver to `pcl::PointCloud<velodyne_pcl::PointXYZIRT>` objects.
+Convert `sensor_msgs::PointCloud2` objects coming from the velodyne_pointcloud driver to `pcl::PointCloud<any_velodyne_pcl::PointXYZIRT>` objects.
 
 The `sensor_msgs::PointCloud2` ROS message is constructed by using the `PointcloudXYZIRT`, or the `OrganizedCloudXYZIRT` container.
 Both define the following channels:
@@ -16,7 +16,7 @@ To convert a `sensor_msgs::PointCloud2` published by the velodyne driver to PCL 
 
 ```
 #include <pcl_conversions/pcl_conversions.h>
-#include <velodyne_pcl/point_types.h>
+#include <any_velodyne_pcl/point_types.h>
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/conversions.h>
 
@@ -24,7 +24,7 @@ void cloud_callback(const boost::shared_ptr<const sensor_msgs::PointCloud2>& clo
 
   pcl::PCLPointCloud2 pcl_pointcloud2;
   pcl_conversions::toPCL(*cloud, pcl_pointcloud2);
-  pcl::PointCloud<velodyne_pcl::PointXYZIRT>::Ptr pcl_cloud_ptr(new pcl::PointCloud<velodyne_pcl::PointXYZIRT>);
+  pcl::PointCloud<any_velodyne_pcl::PointXYZIRT>::Ptr pcl_cloud_ptr(new pcl::PointCloud<any_velodyne_pcl::PointXYZIRT>);
   pcl::fromPCLPointCloud2(pcl_pointcloud2, *pcl_cloud_ptr);
 
   // use pcl_cloud_ptr

@@ -31,7 +31,7 @@ namespace YAML {
 #endif // HAVE_NEW_YAMLCPP
 
 #include <ros/ros.h>
-#include <velodyne_pointcloud/calibration.h>
+#include <any_velodyne_pointcloud/calibration.h>
 
 namespace velodyne_pointcloud 
 {

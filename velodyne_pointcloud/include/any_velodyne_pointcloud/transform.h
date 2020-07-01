@@ -48,11 +48,11 @@
 #include <diagnostic_updater/publisher.h>
 #include <sensor_msgs/PointCloud2.h>
 
-#include <velodyne_pointcloud/rawdata.h>
-#include <velodyne_pointcloud/pointcloudXYZIRT.h>
+#include <any_velodyne_pointcloud/rawdata.h>
+#include <any_velodyne_pointcloud/pointcloudXYZIRT.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <velodyne_pointcloud/TransformNodeConfig.h>
+#include <any_velodyne_pointcloud/TransformNodeConfig.h>
 
 namespace velodyne_pointcloud
 {
@@ -70,7 +70,7 @@ public:
   }
 
 private:
-  void processScan(const velodyne_msgs::VelodyneScan::ConstPtr& scanMsg);
+  void processScan(const any_velodyne_msgs::VelodyneScan::ConstPtr& scanMsg);
 
   // Pointer to dynamic reconfigure service srv_
   boost::shared_ptr<dynamic_reconfigure::Server<velodyne_pointcloud::TransformNodeConfig>> srv_;
@@ -78,9 +78,9 @@ private:
 
   const std::string tf_prefix_;
   boost::shared_ptr<velodyne_rawdata::RawData> data_;
-  message_filters::Subscriber<velodyne_msgs::VelodyneScan> velodyne_scan_;
+  message_filters::Subscriber<any_velodyne_msgs::VelodyneScan> velodyne_scan_;
   ros::Publisher output_;
-  boost::shared_ptr<tf::MessageFilter<velodyne_msgs::VelodyneScan>> tf_filter_ptr_;
+  boost::shared_ptr<tf::MessageFilter<any_velodyne_msgs::VelodyneScan>> tf_filter_ptr_;
   boost::shared_ptr<tf::TransformListener> tf_ptr_;
 
   /// configuration parameters

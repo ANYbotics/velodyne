@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>velodyne</name>
+  <name>any_velodyne</name>
   <version>1.5.2</version>
   <description>
     Basic ROS support for the Velodyne 3D LIDARs.
   </description>
-  <maintainer email="josh.whitley@autoware.org">Josh Whitley</maintainer>
+  <maintainer email="ynava@anybotics.com">Yoshua Nava</maintainer>
+  <maintainer email="mwulf@anybotics.com">Maximilian Wulf</maintainer>
+  <author email="ynava@anybotics.com">Yoshua Nava</author>
   <author>Jack O'Quin</author>
   <license>BSD</license>
   <url type="website">http://www.ros.org/wiki/velodyne</url>
@@ -14,10 +16,10 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>velodyne_driver</exec_depend>
-  <exec_depend>velodyne_laserscan</exec_depend>
-  <exec_depend>velodyne_msgs</exec_depend>
-  <exec_depend>velodyne_pointcloud</exec_depend>
+  <exec_depend>any_velodyne_driver</exec_depend>
+  <exec_depend>any_velodyne_laserscan</exec_depend>
+  <exec_depend>any_velodyne_msgs</exec_depend>
+  <exec_depend>any_velodyne_pointcloud</exec_depend>
 
   <export>
     <metapackage/>

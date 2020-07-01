@@ -53,8 +53,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/file.h>
-#include <velodyne_driver/input.h>
-#include <velodyne_driver/time_conversion.hpp>
+#include <any_velodyne_driver/input.h>
+#include <any_velodyne_driver/time_conversion.hpp>
 
 namespace velodyne_driver
 {
