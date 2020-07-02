@@ -6,7 +6,7 @@
     ROS device driver for Velodyne 3D LIDARs.
   </description>
   <maintainer email="ynava@anybotics.com">Yoshua Nava</maintainer>
-  <maintainer email="mwulf@anybotics.com">Maximilian Wulf</maintainer>
+  <maintainer email="msuetterlin@anybotics.com">Marco Sütterlin</maintainer>
   <author email="ynava@anybotics.com">Yoshua Nava</author>
   <author>Jack O'Quin</author>
   <author>Patrick Beeson</author>

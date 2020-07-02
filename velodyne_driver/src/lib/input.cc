@@ -100,7 +100,7 @@ namespace velodyne_driver
     }    
 
     // connect to Velodyne UDP port
-    ROS_INFO_STREAM("Opening UDP socket: port " << port);
+    ROS_DEBUG_STREAM("Opening UDP socket: port " << port);
     sockfd_ = socket(PF_INET, SOCK_DGRAM, 0);
     if (sockfd_ == -1)
       {

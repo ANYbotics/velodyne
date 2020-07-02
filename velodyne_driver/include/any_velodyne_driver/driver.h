@@ -53,6 +53,8 @@ public:
                  std::string const & node_name = ros::this_node::getName());
   ~VelodyneDriver() {}
 
+  void resetConnectionToInput(ros::NodeHandle private_nh);
+
   bool poll(void);
 
 private:
@@ -76,6 +78,9 @@ private:
     double time_offset;              // time in seconds added to each velodyne time stamp
     bool enabled;                    // polling is enabled
     bool timestamp_first_packet;
+    double packet_rate;              // packet frequency (Hz)
+    int udp_port;
+    std::string dump_file;
   }
   config_;
 
