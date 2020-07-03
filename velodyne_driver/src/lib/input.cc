@@ -59,7 +59,7 @@
 namespace velodyne_driver
 {
   static const size_t packet_size =
-    sizeof(velodyne_msgs::VelodynePacket().data);
+    sizeof(any_velodyne_msgs::VelodynePacket().data);
 
   ////////////////////////////////////////////////////////////////////////
   // Input base class implementation
@@ -136,7 +136,7 @@ namespace velodyne_driver
   }
 
   /** @brief Get one velodyne packet. */
-  int InputSocket::getPacket(velodyne_msgs::VelodynePacket *pkt, const double time_offset)
+  int InputSocket::getPacket(any_velodyne_msgs::VelodynePacket *pkt, const double time_offset)
   {
     double time1 = ros::Time::now().toSec();
 
@@ -296,7 +296,7 @@ namespace velodyne_driver
   }
 
   /** @brief Get one velodyne packet. */
-  int InputPCAP::getPacket(velodyne_msgs::VelodynePacket *pkt, const double time_offset)
+  int InputPCAP::getPacket(any_velodyne_msgs::VelodynePacket *pkt, const double time_offset)
   {
     struct pcap_pkthdr *header;
     const u_char *pkt_data;

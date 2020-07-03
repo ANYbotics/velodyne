@@ -9,7 +9,7 @@ set(${PROJECT_NAME}_CATKIN_DEPS
     nodelet
     roscpp
     tf
-    velodyne_msgs
+    any_velodyne_msgs
 )
 
 find_package(catkin REQUIRED

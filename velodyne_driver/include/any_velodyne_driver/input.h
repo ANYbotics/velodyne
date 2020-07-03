@@ -60,7 +60,7 @@
 #include <string>
 
 #include <ros/ros.h>
-#include <velodyne_msgs/VelodynePacket.h>
+#include <any_velodyne_msgs/VelodynePacket.h>
 
 namespace velodyne_driver
 {
@@ -83,7 +83,7 @@ public:
    *          -1 if end of file
    *          > 0 if incomplete packet (is this possible?)
    */
-  virtual int getPacket(velodyne_msgs::VelodynePacket *pkt,
+  virtual int getPacket(any_velodyne_msgs::VelodynePacket *pkt,
                         const double time_offset) = 0;
 
 protected:
@@ -101,7 +101,7 @@ public:
               uint16_t port = DATA_PORT_NUMBER);
   virtual ~InputSocket();
 
-  virtual int getPacket(velodyne_msgs::VelodynePacket *pkt,
+  virtual int getPacket(any_velodyne_msgs::VelodynePacket *pkt,
                         const double time_offset);
   void setDeviceIP(const std::string& ip);
 
@@ -128,7 +128,7 @@ public:
             double repeat_delay = 0.0);
   virtual ~InputPCAP();
 
-  virtual int getPacket(velodyne_msgs::VelodynePacket *pkt,
+  virtual int getPacket(any_velodyne_msgs::VelodynePacket *pkt,
                         const double time_offset);
   void setDeviceIP(const std::string& ip);
 
