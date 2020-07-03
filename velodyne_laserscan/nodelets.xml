@@ -1,5 +1,5 @@
 <library path="libany_velodyne_laserscan">
-  <class name="velodyne_laserscan/LaserScanNodelet"
+  <class name="any_velodyne_laserscan/LaserScanNodelet"
          type="velodyne_laserscan::LaserScanNodelet"
          base_class_type="nodelet::Nodelet">
     <description>
