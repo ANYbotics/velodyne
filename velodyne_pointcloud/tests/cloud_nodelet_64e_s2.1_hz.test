@@ -6,14 +6,14 @@
   <!-- start nodelet manager and driver nodelets -->
   <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
     <arg name="model" value="64E_S2.1"/>
-    <arg name="pcap" value="$(find velodyne_pointcloud)/tests/64e_s2.1-300-sztaki.pcap"/>
+    <arg name="pcap" value="$(find any_velodyne_pointcloud)/tests/64e_s2.1-300-sztaki.pcap"/>
     <arg name="rpm" value="300"/>
   </include>
 
   <!-- start cloud nodelet using test calibration file -->
-  <include file="$(find velodyne_pointcloud)/launch/cloud_nodelet.launch">
+  <include file="$(find any_velodyne_pointcloud)/launch/cloud_nodelet.launch">
     <arg name="calibration"
-         value="$(find velodyne_pointcloud)/params/64e_s2.1-sztaki.yaml"/>
+         value="$(find any_velodyne_pointcloud)/params/64e_s2.1-sztaki.yaml"/>
   </include>
 
   <!-- verify PointCloud2 publication rate -->

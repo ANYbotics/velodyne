@@ -19,20 +19,19 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>roslint</build_depend>
-
   <depend>angles</depend>
+  <depend>any_velodyne_driver</depend>
+  <depend>any_velodyne_msgs</depend>
+  <depend>boost</depend>
+  <depend>diagnostic_updater</depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>eigen</depend>
   <depend>nodelet</depend>
   <depend>roscpp</depend>
   <depend>roslib</depend>
   <depend>sensor_msgs</depend>
   <depend>tf</depend>
-  <depend>any_velodyne_driver</depend>
-  <depend>any_velodyne_msgs</depend>
   <depend>yaml-cpp</depend>
-  <depend>dynamic_reconfigure</depend>
-  <depend>diagnostic_updater</depend>
-  <depend>eigen</depend>
 
   <exec_depend>any_velodyne_laserscan</exec_depend>
 

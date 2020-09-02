@@ -56,6 +56,8 @@ namespace velodyne_pointcloud
 class Convert
 {
   public:
+    using CloudNodeConfig = any_velodyne_pointcloud::CloudNodeConfig;
+
     Convert(
         ros::NodeHandle node,
         ros::NodeHandle private_nh,
@@ -63,10 +65,10 @@ class Convert
     ~Convert() {}
 
   private:
-    void callback(velodyne_pointcloud::CloudNodeConfig &config, uint32_t level);
+    void callback(CloudNodeConfig &config, uint32_t level);
     void processScan(const any_velodyne_msgs::VelodyneScan::ConstPtr &scanMsg);
 
-    boost::shared_ptr<dynamic_reconfigure::Server<velodyne_pointcloud::CloudNodeConfig> > srv_;
+    boost::shared_ptr<dynamic_reconfigure::Server<CloudNodeConfig> > srv_;
 
     boost::shared_ptr<velodyne_rawdata::RawData> data_;
     ros::Subscriber velodyne_scan_;

@@ -7,7 +7,7 @@
   <arg name="resolution" default="0.007" />
 
   <node pkg="nodelet" type="nodelet" name="$(arg manager)_laserscan"
-        args="load velodyne_laserscan/LaserScanNodelet $(arg manager)">
+        args="load any_velodyne_laserscan/LaserScanNodelet $(arg manager)">
     <param name="ring" value="$(arg ring)"/>
     <param name="resolution" value="$(arg resolution)"/>
   </node>

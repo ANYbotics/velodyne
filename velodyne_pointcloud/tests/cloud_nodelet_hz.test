@@ -10,13 +10,13 @@
 
   <!-- start nodelet manager and driver nodelets -->
   <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
-    <arg name="pcap" value="$(find velodyne_pointcloud)/tests/class.pcap"/>
+    <arg name="pcap" value="$(find any_velodyne_pointcloud)/tests/class.pcap"/>
   </include>
 
   <!-- start cloud nodelet using test calibration file -->
-  <include file="$(find velodyne_pointcloud)/launch/cloud_nodelet.launch">
+  <include file="$(find any_velodyne_pointcloud)/launch/cloud_nodelet.launch">
     <arg name="calibration"
-         value="$(find velodyne_pointcloud)/params/64e_utexas.yaml"/>
+         value="$(find any_velodyne_pointcloud)/params/64e_utexas.yaml"/>
   </include>
 
   <!-- verify PointCloud2 publication rate -->

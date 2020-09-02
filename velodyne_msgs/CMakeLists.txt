@@ -1,16 +1,29 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(any_velodyne_msgs)
 
-find_package(catkin REQUIRED COMPONENTS message_generation std_msgs)
-
-add_message_files(
-  DIRECTORY msg
-  FILES
-  VelodynePacket.msg
-  VelodyneScan.msg
+# Find catkin macros and libraries
+find_package(catkin REQUIRED
+  COMPONENTS
+    message_generation
+    std_msgs
 )
-generate_messages(DEPENDENCIES std_msgs)
 
+# Declare the service and message files to be built
+add_message_files(
+  DIRECTORY
+    msg
+  FILES
+    VelodynePacket.msg
+    VelodyneScan.msg
+)
+generate_messages(
+  DEPENDENCIES
+    std_msgs
+)
+
+# Catkin package macro
 catkin_package(
-  CATKIN_DEPENDS message_runtime std_msgs
+  CATKIN_DEPENDS
+    message_runtime
+    std_msgs
 )

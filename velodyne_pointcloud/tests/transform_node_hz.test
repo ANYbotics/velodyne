@@ -4,17 +4,17 @@
 <launch>
 
   <!-- define transforms for static vehicle -->
-  <include file="$(find velodyne_pointcloud)/tests/static_vehicle_tf.launch" />
+  <include file="$(find any_velodyne_pointcloud)/tests/static_vehicle_tf.launch" />
 
   <!-- start driver with example PCAP file -->
   <node pkg="velodyne_driver" type="velodyne_node" name="velodyne_node">
-    <param name="pcap" value="$(find velodyne_pointcloud)/tests/class.pcap"/>
+    <param name="pcap" value="$(find any_velodyne_pointcloud)/tests/class.pcap"/>
   </node>
 
   <!-- start transform node with test calibration file -->
   <node pkg="velodyne_pointcloud" type="transform_node" name="transform_node">
     <param name="calibration"
-           value="$(find velodyne_pointcloud)/tests/angles.yaml"/>
+           value="$(find any_velodyne_pointcloud)/tests/angles.yaml"/>
   </node>
 
   <!-- Verify PointCloud2 publication rate.  Unfortunately,

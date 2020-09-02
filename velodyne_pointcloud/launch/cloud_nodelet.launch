@@ -12,7 +12,7 @@
   <arg name="organize_cloud" default="false" />
 
   <node pkg="nodelet" type="nodelet" name="$(arg manager)_cloud"
-        args="load velodyne_pointcloud/CloudNodelet $(arg manager)">
+        args="load any_velodyne_pointcloud/CloudNodelet $(arg manager)">
     <param name="model" value="$(arg model)"/>
     <param name="calibration" value="$(arg calibration)"/>
     <param name="fixed_frame" value="$(arg fixed_frame)"/>

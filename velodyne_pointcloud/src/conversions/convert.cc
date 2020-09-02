@@ -63,10 +63,8 @@ namespace velodyne_pointcloud
     output_ =
       node.advertise<sensor_msgs::PointCloud2>("velodyne_points", 10);
 
-    srv_ = boost::make_shared <dynamic_reconfigure::Server<velodyne_pointcloud::
-      CloudNodeConfig> > (private_nh);
-    dynamic_reconfigure::Server<velodyne_pointcloud::CloudNodeConfig>::
-      CallbackType f;
+    srv_ = boost::make_shared <dynamic_reconfigure::Server<CloudNodeConfig> > (private_nh);
+    dynamic_reconfigure::Server<CloudNodeConfig>::CallbackType f;
     f = boost::bind (&Convert::callback, this, _1, _2);
     srv_->setCallback (f);
 
@@ -90,8 +88,7 @@ namespace velodyne_pointcloud
                                        TimeStampStatusParam()));
   }
 
-  void Convert::callback(velodyne_pointcloud::CloudNodeConfig &config,
-                uint32_t level)
+  void Convert::callback(CloudNodeConfig &config, uint32_t level)
   {
     ROS_INFO("Reconfigure Request");
     data_->setParameters(config.min_range, config.max_range, config.view_direction,

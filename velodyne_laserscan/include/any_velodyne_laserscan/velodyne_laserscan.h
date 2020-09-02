@@ -49,6 +49,8 @@ namespace velodyne_laserscan
 class VelodyneLaserScan
 {
 public:
+  using VelodyneLaserScanConfig = any_velodyne_laserscan::VelodyneLaserScanConfig;
+
   VelodyneLaserScan(ros::NodeHandle &nh, ros::NodeHandle &nh_priv);
 
 private:

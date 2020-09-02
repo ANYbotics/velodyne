@@ -4,9 +4,9 @@
 <launch>
 
   <!-- start nodelet manager, driver and cloud nodelets -->
-  <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
+  <include file="$(find any_velodyne_pointcloud)/launch/VLP16_points.launch">
     <arg name="frame_id" value="test_frame"/>
-    <arg name="pcap" value="$(find velodyne_pointcloud)/tests/vlp16.pcap"/>
+    <arg name="pcap" value="$(find any_velodyne_pointcloud)/tests/vlp16.pcap"/>
   </include>
 
   <!-- verify PointCloud2 publication rate -->

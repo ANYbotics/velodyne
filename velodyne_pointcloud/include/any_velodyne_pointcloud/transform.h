@@ -56,11 +56,11 @@
 
 namespace velodyne_pointcloud
 {
-using TransformNodeCfg = velodyne_pointcloud::TransformNodeConfig;
-
 class Transform
 {
 public:
+  using TransformNodeConfig = any_velodyne_pointcloud::TransformNodeConfig;
+
   Transform(
       ros::NodeHandle node,
       ros::NodeHandle private_nh,
@@ -73,8 +73,8 @@ private:
   void processScan(const any_velodyne_msgs::VelodyneScan::ConstPtr& scanMsg);
 
   // Pointer to dynamic reconfigure service srv_
-  boost::shared_ptr<dynamic_reconfigure::Server<velodyne_pointcloud::TransformNodeConfig>> srv_;
-  void reconfigure_callback(velodyne_pointcloud::TransformNodeConfig& config, uint32_t level);
+  boost::shared_ptr<dynamic_reconfigure::Server<TransformNodeConfig>> srv_;
+  void reconfigure_callback(TransformNodeConfig& config, uint32_t level);
 
   const std::string tf_prefix_;
   boost::shared_ptr<velodyne_rawdata::RawData> data_;

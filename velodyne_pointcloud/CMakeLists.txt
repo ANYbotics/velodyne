@@ -1,33 +1,27 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(any_velodyne_pointcloud)
 
-# Set minimum C++ standard to C++11
-if (NOT "${CMAKE_CXX_STANDARD_COMPUTED_DEFAULT}")
-  message(STATUS "Changing CXX_STANDARD from C++98 to C++11")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif ("${CMAKE_CXX_STANDARD_COMPUTED_DEFAULT}" STREQUAL "98")
-  message(STATUS "Changing CXX_STANDARD from C++98 to C++11")
-  set(CMAKE_CXX_STANDARD 11)
-endif()
+set(CMAKE_CXX_STANDARD 14)
 
-set(${PROJECT_NAME}_CATKIN_DEPS
-    angles
-    nodelet
-    roscpp
-    roslib
-    sensor_msgs
-    tf
-    any_velodyne_driver
-    any_velodyne_msgs
-    dynamic_reconfigure
-    diagnostic_updater
+set(${CATKIN_PACKAGE_DEPENDENCIES}
+  angles
+  any_velodyne_driver
+  any_velodyne_msgs
+  diagnostic_updater
+  dynamic_reconfigure
+  nodelet
+  roscpp
+  roslib
+  sensor_msgs
+  tf
 )
 
-find_package(catkin REQUIRED COMPONENTS
-             ${${PROJECT_NAME}_CATKIN_DEPS}
-             roslint)
+find_package(catkin REQUIRED
+  COMPONENTS
+    ${${CATKIN_PACKAGE_DEPENDENCIES}}
+)
 
-find_package(Boost COMPONENTS signals)
+find_package(Boost REQUIRED)
 find_package(Eigen3 REQUIRED)
 # Resolve system dependency on yaml-cpp, which apparently does not
 # provide a CMake find_package() module.
@@ -42,64 +36,170 @@ find_library(YAML_CPP_LIBRARY
 
 link_directories(${YAML_CPP_LIBRARY_DIRS})
 
+# Generate dynamic_reconfigure server
 generate_dynamic_reconfigure_options(
-  cfg/CloudNode.cfg cfg/TransformNode.cfg
+  cfg/CloudNode.cfg
+  cfg/TransformNode.cfg
 )
 
 if(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
   add_definitions(-DHAVE_NEW_YAMLCPP)
 endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
 
-include_directories(include ${catkin_INCLUDE_DIRS}
-  ${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake
-  ${EIGEN3_INCLUDE_DIR}
+include_directories(
+  include
+  SYSTEM
+    ${catkin_INCLUDE_DIRS}
+    ${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake
+    ${Boost_INCLUDE_DIRS}
+    ${EIGEN3_INCLUDE_DIR}
 )
 
 catkin_package(
-    CATKIN_DEPENDS ${${PROJECT_NAME}_CATKIN_DEPS}
-    INCLUDE_DIRS include
-    LIBRARIES velodyne_rawdata)
+  INCLUDE_DIRS
+    include
+  LIBRARIES
+    any_velodyne_rawdata
+    any_velodyne_cloud_nodelet
+    any_velodyne_transform_nodelet
+  CATKIN_DEPENDS
+    ${${CATKIN_PACKAGE_DEPENDENCIES}}
+  DEPENDS
+    Boost
+)
 
-#add_executable(dynamic_reconfigure_node src/dynamic_reconfigure_node.cpp)
-#target_link_libraries(dynamic_reconfigure_node
-#   ${catkin_LIBRARIES}
-# )
+#############
+# Libraries #
+#############
+add_library(any_velodyne_rawdata
+  src/lib/rawdata.cc
+  src/lib/calibration.cc
+)
+add_dependencies(any_velodyne_rawdata
+  ${PROJECT_NAME}_gencfg
+)
+target_link_libraries(any_velodyne_rawdata 
+  ${catkin_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
+)
 
-add_subdirectory(src/lib)
-add_subdirectory(src/conversions)
+######################
+# Nodes and nodelets #
+######################
+# Point cloud.
+add_executable(any_velodyne_cloud_node src/conversions/cloud_node.cc
+  src/conversions/convert.cc
+  src/conversions/pointcloudXYZIRT.cc
+  src/conversions/organized_cloudXYZIRT.cc
+)
+add_dependencies(any_velodyne_cloud_node
+  ${PROJECT_NAME}_gencfg
+)
+target_link_libraries(any_velodyne_cloud_node 
+  any_velodyne_rawdata
+  ${catkin_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
+)
 
-install(DIRECTORY include/${PROJECT_NAME}/
-        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
-install(FILES nodelets.xml
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-install(DIRECTORY launch/
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
-install(DIRECTORY params/
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/params)
-install(PROGRAMS scripts/gen_calibration.py
-        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+add_library(any_velodyne_cloud_nodelet src/conversions/cloud_nodelet.cc
+  src/conversions/convert.cc
+  src/conversions/pointcloudXYZIRT.cc
+  src/conversions/organized_cloudXYZIRT.cc
+)
+add_dependencies(any_velodyne_cloud_nodelet
+  ${PROJECT_NAME}_gencfg
+)
+target_link_libraries(any_velodyne_cloud_nodelet
+  any_velodyne_rawdata
+  ${catkin_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
+)
 
-# roslint_cpp()
+# Transform.
+add_executable(any_velodyne_transform_node src/conversions/transform_node.cc
+  src/conversions/transform.cc
+  src/conversions/pointcloudXYZIRT.cc
+  src/conversions/organized_cloudXYZIRT.cc
+)
+add_dependencies(any_velodyne_transform_node
+  ${PROJECT_NAME}_gencfg
+)
+target_link_libraries(any_velodyne_transform_node
+  any_velodyne_rawdata
+  ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES}
+)
 
-# if (CATKIN_ENABLE_TESTING)
-#   add_subdirectory(tests)
-# endif()
+add_library(any_velodyne_transform_nodelet src/conversions/transform_nodelet.cc
+  src/conversions/transform.cc
+  src/conversions/pointcloudXYZIRT.cc
+  src/conversions/organized_cloudXYZIRT.cc
+)
+add_dependencies(any_velodyne_transform_nodelet
+  ${PROJECT_NAME}_gencfg
+)
+target_link_libraries(any_velodyne_transform_nodelet
+  any_velodyne_rawdata
+  ${catkin_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
+)
 
+
+###########
+# Install #
+###########
+install(TARGETS
+    any_velodyne_rawdata
+    any_velodyne_cloud_node
+    any_velodyne_cloud_nodelet
+    any_velodyne_transform_node
+    any_velodyne_transform_nodelet
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+install(
+  DIRECTORY
+    include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
+install(
+  FILES
+    nodelets.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+install(
+  DIRECTORY
+    launch/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+)
+install(
+  DIRECTORY
+    params/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/params
+)
+install(
+  PROGRAMS 
+    scripts/gen_calibration.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 ##############
 ##   Test   ##
 ##############
 if(CATKIN_ENABLE_TESTING)
+  find_package(catkin REQUIRED
+    COMPONENTS
+      ${${CATKIN_PACKAGE_DEPENDENCIES}}
+  )
+
   catkin_add_gtest(test_${PROJECT_NAME}
     tests/empty_test.cpp
   )
-
   target_include_directories(test_${PROJECT_NAME}
     PRIVATE
       include
     SYSTEM PUBLIC
       ${catkin_INCLUDE_DIRS}
   )
-
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main
     ${catkin_LIBRARIES}
@@ -114,5 +214,5 @@ if(CATKIN_ENABLE_TESTING)
       TEST_BUILD_TARGETS
         test_${PROJECT_NAME}
     )
-  endif(cmake_code_coverage_FOUND)
+  endif()
 endif()

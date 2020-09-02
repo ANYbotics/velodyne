@@ -1,26 +1,30 @@
-cmake_minimum_required(VERSION 2.8.1)
+cmake_minimum_required(VERSION 3.5.1)
 project(any_velodyne_driver)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
-set(${PROJECT_NAME}_CATKIN_DEPS 
-    diagnostic_updater
-    dynamic_reconfigure
-    nodelet
-    roscpp
-    tf
-    any_velodyne_msgs
+set(${CATKIN_PACKAGE_DEPENDENCIES}
+  any_velodyne_msgs
+  diagnostic_updater
+  dynamic_reconfigure
+  nodelet
+  roscpp
+  tf
 )
 
 find_package(catkin REQUIRED
   COMPONENTS
     ${${PROJECT_NAME}_CATKIN_DEPS}
-    roslint
 )
 find_package(Boost REQUIRED COMPONENTS thread)
 
 # libpcap provides no pkg-config or find_package module:
 set(libpcap_LIBRARIES -lpcap)
+
+# Generate dynamic_reconfigure server
+generate_dynamic_reconfigure_options(
+  cfg/VelodyneNode.cfg
+)
 
 include_directories(
   include 
@@ -29,19 +33,16 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-# Generate dynamic_reconfigure server
-generate_dynamic_reconfigure_options(cfg/VelodyneNode.cfg)
-
 # objects needed by other ROS packages that depend on this one
 catkin_package(
-  CATKIN_DEPENDS
-    ${${PROJECT_NAME}_CATKIN_DEPS}
   INCLUDE_DIRS
     include
   LIBRARIES
     ${PROJECT_NAME}_socket
     ${PROJECT_NAME}
     ${PROJECT_NAME}_nodelet
+  CATKIN_DEPENDS
+    ${${PROJECT_NAME}_CATKIN_DEPS}
 )
 
 #############
@@ -52,7 +53,7 @@ add_library(${PROJECT_NAME}_socket
   src/lib/input.cc
 )
 add_dependencies(${PROJECT_NAME}_socket
-  ${catkin_EXPORTED_TARGETS}
+  ${PROJECT_NAME}_gencfg
 )
 target_link_libraries(${PROJECT_NAME}_socket
   ${catkin_LIBRARIES}
@@ -64,7 +65,6 @@ add_library(${PROJECT_NAME}
   src/driver/driver.cc
 )
 add_dependencies(${PROJECT_NAME}
-  ${catkin_EXPORTED_TARGETS}
   ${PROJECT_NAME}_gencfg
 )
 target_link_libraries(${PROJECT_NAME}
@@ -142,8 +142,6 @@ install(
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-# roslint_cpp()
-
 # if (CATKIN_ENABLE_TESTING)
 
 #   # these dependencies are only needed for unit testing
@@ -190,17 +188,20 @@ install(
 ##   Test   ##
 ##############
 if(CATKIN_ENABLE_TESTING)
+  find_package(catkin REQUIRED
+    COMPONENTS
+      ${${PROJECT_NAME}_CATKIN_DEPS}
+  )
+  
   catkin_add_gtest(test_${PROJECT_NAME}
     tests/empty_test.cpp
   )
-
   target_include_directories(test_${PROJECT_NAME}
     PRIVATE
       include
     SYSTEM PUBLIC
       ${catkin_INCLUDE_DIRS}
   )
-
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main
     ${PROJECT_NAME}
@@ -216,5 +217,5 @@ if(CATKIN_ENABLE_TESTING)
       TEST_BUILD_TARGETS
         test_${PROJECT_NAME}
     )
-  endif(cmake_code_coverage_FOUND)
+  endif()
 endif()
