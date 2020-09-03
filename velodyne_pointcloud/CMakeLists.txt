@@ -3,7 +3,7 @@ project(any_velodyne_pointcloud)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(${CATKIN_PACKAGE_DEPENDENCIES}
+set(CATKIN_PACKAGE_DEPENDENCIES
   angles
   any_velodyne_driver
   any_velodyne_msgs
@@ -18,7 +18,7 @@ set(${CATKIN_PACKAGE_DEPENDENCIES}
 
 find_package(catkin REQUIRED
   COMPONENTS
-    ${${CATKIN_PACKAGE_DEPENDENCIES}}
+    ${CATKIN_PACKAGE_DEPENDENCIES}
 )
 
 find_package(Boost REQUIRED)
@@ -46,15 +46,6 @@ if(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
   add_definitions(-DHAVE_NEW_YAMLCPP)
 endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
 
-include_directories(
-  include
-  SYSTEM
-    ${catkin_INCLUDE_DIRS}
-    ${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake
-    ${Boost_INCLUDE_DIRS}
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 catkin_package(
   INCLUDE_DIRS
     include
@@ -63,9 +54,18 @@ catkin_package(
     any_velodyne_cloud_nodelet
     any_velodyne_transform_nodelet
   CATKIN_DEPENDS
-    ${${CATKIN_PACKAGE_DEPENDENCIES}}
+    ${CATKIN_PACKAGE_DEPENDENCIES}
   DEPENDS
     Boost
+)
+
+include_directories(
+  include
+  SYSTEM
+    ${catkin_INCLUDE_DIRS}
+    ${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake
+    ${Boost_INCLUDE_DIRS}
+    ${EIGEN3_INCLUDE_DIR}
 )
 
 #############
@@ -188,17 +188,17 @@ install(
 if(CATKIN_ENABLE_TESTING)
   find_package(catkin REQUIRED
     COMPONENTS
-      ${${CATKIN_PACKAGE_DEPENDENCIES}}
+      ${CATKIN_PACKAGE_DEPENDENCIES}
   )
 
   catkin_add_gtest(test_${PROJECT_NAME}
     tests/empty_test.cpp
   )
-  target_include_directories(test_${PROJECT_NAME}
-    PRIVATE
-      include
-    SYSTEM PUBLIC
-      ${catkin_INCLUDE_DIRS}
+  target_include_directories(test_${PROJECT_NAME} PRIVATE
+    include
+  )
+  target_include_directories(test_${PROJECT_NAME} SYSTEM PUBLIC
+    ${catkin_INCLUDE_DIRS}
   )
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main

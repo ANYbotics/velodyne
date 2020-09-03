@@ -3,7 +3,7 @@ project(any_velodyne_laserscan)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(${CATKIN_PACKAGE_DEPENDENCIES}
+set(CATKIN_PACKAGE_DEPENDENCIES
   roscpp
   nodelet
   sensor_msgs
@@ -19,12 +19,6 @@ generate_dynamic_reconfigure_options(
   cfg/VelodyneLaserScan.cfg
 )
 
-include_directories(
-  include
-  SYSTEM
-    ${catkin_INCLUDE_DIRS}
-)
-
 catkin_package(
   INCLUDE_DIRS
     include
@@ -32,7 +26,13 @@ catkin_package(
     ${PROJECT_NAME}
     ${PROJECT_NAME}_nodelet
   CATKIN_DEPENDS
-    sensor_msgs
+    ${CATKIN_PACKAGE_DEPENDENCIES}
+)
+
+include_directories(
+  include
+  SYSTEM
+    ${catkin_INCLUDE_DIRS}
 )
 
 #############
@@ -109,11 +109,11 @@ if(CATKIN_ENABLE_TESTING)
   catkin_add_gtest(test_${PROJECT_NAME}
     tests/empty_test.cpp
   )
-  target_include_directories(test_${PROJECT_NAME}
-    PRIVATE
-      include
-    SYSTEM PUBLIC
-      ${catkin_INCLUDE_DIRS}
+  target_include_directories(test_${PROJECT_NAME} PRIVATE
+    include
+  )
+  target_include_directories(test_${PROJECT_NAME} SYSTEM PUBLIC
+    ${catkin_INCLUDE_DIRS}
   )
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main

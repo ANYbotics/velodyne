@@ -3,7 +3,7 @@ project(any_velodyne_driver)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(${CATKIN_PACKAGE_DEPENDENCIES}
+set(CATKIN_PACKAGE_DEPENDENCIES
   any_velodyne_msgs
   diagnostic_updater
   dynamic_reconfigure
@@ -14,7 +14,7 @@ set(${CATKIN_PACKAGE_DEPENDENCIES}
 
 find_package(catkin REQUIRED
   COMPONENTS
-    ${${PROJECT_NAME}_CATKIN_DEPS}
+    ${CATKIN_PACKAGE_DEPENDENCIES}
 )
 find_package(Boost REQUIRED COMPONENTS thread)
 
@@ -26,13 +26,6 @@ generate_dynamic_reconfigure_options(
   cfg/VelodyneNode.cfg
 )
 
-include_directories(
-  include 
-  SYSTEM
-    ${Boost_INCLUDE_DIR}
-    ${catkin_INCLUDE_DIRS}
-)
-
 # objects needed by other ROS packages that depend on this one
 catkin_package(
   INCLUDE_DIRS
@@ -42,7 +35,14 @@ catkin_package(
     ${PROJECT_NAME}
     ${PROJECT_NAME}_nodelet
   CATKIN_DEPENDS
-    ${${PROJECT_NAME}_CATKIN_DEPS}
+    ${CATKIN_PACKAGE_DEPENDENCIES}
+)
+
+include_directories(
+  include 
+  SYSTEM
+    ${Boost_INCLUDE_DIR}
+    ${catkin_INCLUDE_DIRS}
 )
 
 #############
@@ -190,17 +190,17 @@ install(
 if(CATKIN_ENABLE_TESTING)
   find_package(catkin REQUIRED
     COMPONENTS
-      ${${PROJECT_NAME}_CATKIN_DEPS}
+      ${CATKIN_PACKAGE_DEPENDENCIES}
   )
   
   catkin_add_gtest(test_${PROJECT_NAME}
     tests/empty_test.cpp
   )
-  target_include_directories(test_${PROJECT_NAME}
-    PRIVATE
-      include
-    SYSTEM PUBLIC
-      ${catkin_INCLUDE_DIRS}
+  target_include_directories(test_${PROJECT_NAME} PRIVATE
+    include
+  )
+  target_include_directories(test_${PROJECT_NAME} SYSTEM PUBLIC
+    ${catkin_INCLUDE_DIRS}
   )
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main
