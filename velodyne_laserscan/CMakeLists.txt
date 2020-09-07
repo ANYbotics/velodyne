@@ -101,13 +101,11 @@ install(
 ##   Test   ##
 ##############
 if(CATKIN_ENABLE_TESTING)
-  find_package(catkin REQUIRED
-    COMPONENTS
-      ${CATKIN_PACKAGE_DEPENDENCIES}
-  )
-
   catkin_add_gtest(test_${PROJECT_NAME}
     tests/empty_test.cpp
+  )
+  add_dependencies(test_${PROJECT_NAME}
+    ${PROJECT_NAME}_node
   )
   target_include_directories(test_${PROJECT_NAME} PRIVATE
     include
@@ -118,6 +116,7 @@ if(CATKIN_ENABLE_TESTING)
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main
     ${PROJECT_NAME}
+    ${PROJECT_NAME}_nodelet
     ${catkin_LIBRARIES}
   )
 

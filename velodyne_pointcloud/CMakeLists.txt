@@ -186,13 +186,12 @@ install(
 ##   Test   ##
 ##############
 if(CATKIN_ENABLE_TESTING)
-  find_package(catkin REQUIRED
-    COMPONENTS
-      ${CATKIN_PACKAGE_DEPENDENCIES}
-  )
-
   catkin_add_gtest(test_${PROJECT_NAME}
     tests/empty_test.cpp
+  )
+  add_dependencies(test_${PROJECT_NAME}
+    any_velodyne_cloud_node
+    any_velodyne_transform_node
   )
   target_include_directories(test_${PROJECT_NAME} PRIVATE
     include
@@ -202,6 +201,9 @@ if(CATKIN_ENABLE_TESTING)
   )
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main
+    any_velodyne_rawdata
+    any_velodyne_cloud_nodelet
+    any_velodyne_transform_nodelet
     ${catkin_LIBRARIES}
   )
 
