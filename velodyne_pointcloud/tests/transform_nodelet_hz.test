@@ -7,7 +7,7 @@
   <include file="$(find any_velodyne_pointcloud)/tests/static_vehicle_tf.launch" />
 
   <!-- start nodelet manager and driver nodelets -->
-  <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+  <include file="$(find any_velodyne_driver)/launch/nodelet_manager.launch">
     <arg name="pcap" value="$(find any_velodyne_pointcloud)/tests/class.pcap"/>
   </include>
 

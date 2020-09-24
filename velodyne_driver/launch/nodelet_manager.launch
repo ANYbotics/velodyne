@@ -1,5 +1,5 @@
 <!-- -*- mode: XML -*- -->
-<!-- start velodyne_driver/DriverNodelet in a nodelet manager -->
+<!-- start any_velodyne_driver/DriverNodelet in a nodelet manager -->
 
 <launch>
 
@@ -22,7 +22,7 @@
 
   <!-- load driver nodelet into it -->
   <node pkg="nodelet" type="nodelet" name="$(arg manager)_driver"
-        args="load velodyne_driver/DriverNodelet $(arg manager)" >
+        args="load any_velodyne_driver/DriverNodelet $(arg manager)" >
     <param name="device_ip" value="$(arg device_ip)" />
     <param name="frame_id" value="$(arg frame_id)"/>
     <param name="model" value="$(arg model)"/>

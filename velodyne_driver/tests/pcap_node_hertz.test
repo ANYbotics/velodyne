@@ -4,8 +4,8 @@
 <launch>
 
   <!-- start read with example PCAP file -->
-  <node pkg="velodyne_driver" type="velodyne_node" name="velodyne_node">
-    <param name="pcap" value="$(find velodyne_driver)/tests/class.pcap"/>
+  <node pkg="velodyne_driver" type="any_velodyne_driver_node" name="velodyne_node">
+    <param name="pcap" value="$(find any_velodyne_driver)/tests/class.pcap"/>
   </node>
 
   <test test-name="pcap_node_hertz_test" pkg="rostest"

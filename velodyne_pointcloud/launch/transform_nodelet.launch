@@ -1,5 +1,5 @@
 <!-- -*- mode: XML -*- -->
-<!-- run velodyne_pointcloud/TransformNodelet in a nodelet manager -->
+<!-- run any_velodyne_pointcloud/TransformNodelet in a nodelet manager -->
 
 <launch>
   <arg name="model" default="" />
@@ -10,7 +10,7 @@
   <arg name="min_range" default="0.9" />
   <arg name="organize_cloud" default="false" />
   <node pkg="nodelet" type="nodelet" name="$(arg manager)_transform"
-        args="load velodyne_pointcloud/TransformNodelet $(arg manager)" >
+        args="load any_velodyne_pointcloud/TransformNodelet $(arg manager)" >
     <param name="model" value="$(arg model)"/>
     <param name="calibration" value="$(arg calibration)"/>
     <param name="frame_id" value="$(arg frame_id)"/>

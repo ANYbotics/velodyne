@@ -1,5 +1,5 @@
 <!-- -*- mode: XML -*- -->
-<!-- rostest of the velodyne_laserscan system -->
+<!-- rostest of the any_velodyne_laserscan system -->
 
 <launch>
 
@@ -10,7 +10,7 @@
   <arg name="manager" default="nodelet_manager" />
   <node pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" output="$(arg output)" />
   <node pkg="nodelet" type="nodelet" name="velodyne_laserscan" output="$(arg output)"
-        args="load velodyne_laserscan/LaserScanNodelet $(arg manager)">
+        args="load any_velodyne_laserscan/LaserScanNodelet $(arg manager)">
   </node>
 
   <!-- Start the rostest -->

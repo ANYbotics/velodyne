@@ -4,9 +4,9 @@
 <launch>
 
   <!-- start nodelet manager, driver and pointcloud nodelets -->
-  <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+  <include file="$(find any_velodyne_driver)/launch/nodelet_manager.launch">
     <arg name="model" value="32E"/>
-    <arg name="pcap" value="$(find velodyne_driver)/tests/32e.pcap"/>
+    <arg name="pcap" value="$(find any_velodyne_driver)/tests/32e.pcap"/>
   </include>
 
   <!-- verify PointCloud publication rate -->

@@ -1,5 +1,5 @@
 <!-- -*- mode: XML -*- -->
-<!-- run velodyne_laserscan/LaserScanNodelet in a nodelet manager -->
+<!-- run any_velodyne_laserscan/LaserScanNodelet in a nodelet manager -->
 
 <launch>
   <arg name="manager" default="velodyne_nodelet_manager" />

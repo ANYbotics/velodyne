@@ -4,7 +4,7 @@
 <launch>
 
   <!-- start nodelet manager and driver nodelets -->
-  <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+  <include file="$(find any_velodyne_driver)/launch/nodelet_manager.launch">
     <arg name="model" value="64E_S2.1"/>
     <arg name="pcap" value="$(find any_velodyne_pointcloud)/tests/64e_s2.1-300-sztaki.pcap"/>
     <arg name="rpm" value="300"/>

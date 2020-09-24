@@ -1,6 +1,6 @@
 ## Diagnostic aggregator parameters for testing Velodyne diagnostics.
 #
-#  $ rosparam load $(rospack find velodyne_driver)/tests/diagnostic_agg.yaml
+#  $ rosparam load $(rospack find any_velodyne_driver)/tests/diagnostic_agg.yaml
 #  $ rosrun diagnostic_aggregator aggregator_node
 #
 diagnostic_aggregator:

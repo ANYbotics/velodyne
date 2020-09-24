@@ -4,13 +4,13 @@
 <launch>
 
   <!-- start driver with example PCAP file -->
-  <node pkg="velodyne_driver" type="velodyne_node" name="velodyne_node">
+  <node pkg="any_velodyne_driver" type="any_velodyne_driver_node" name="velodyne_node">
     <param name="model" value="VLP16"/>
     <param name="pcap" value="$(find any_velodyne_pointcloud)/tests/vlp16.pcap"/>
   </node>
 
   <!-- start cloud node with test calibration file -->
-  <node pkg="velodyne_pointcloud" type="cloud_node" name="cloud_node">
+  <node pkg="any_velodyne_pointcloud" type="cloud_node" name="cloud_node">
     <param name="calibration"
            value="$(find any_velodyne_pointcloud)/params/VLP16db.yaml"/>
   </node>
