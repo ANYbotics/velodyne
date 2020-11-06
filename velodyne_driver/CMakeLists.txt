@@ -133,7 +133,7 @@ install(
 )
 install(
   DIRECTORY
-    launch/
+    launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 install(
