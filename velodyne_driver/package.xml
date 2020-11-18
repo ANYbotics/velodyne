@@ -19,6 +19,7 @@
   <url type="bugtracker">https://github.com/ros-drivers/velodyne/issues</url>
 
   <buildtool_depend>catkin</buildtool_depend>
+<!--   <build_depend>cmake_clang_tools</build_depend> -->
 
   <depend>any_velodyne_msgs</depend>
   <depend>diagnostic_updater</depend>
