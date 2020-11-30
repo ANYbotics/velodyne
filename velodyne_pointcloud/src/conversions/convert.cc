@@ -135,6 +135,7 @@ namespace velodyne_pointcloud
     // process each packet provided by the driver
     for (size_t i = 0; i < scanMsg->packets.size(); ++i)
     {
+      ROS_DEBUG_STREAM("Unpacking Lidar Data Packet Index: " << i);
       data_->unpack(scanMsg->packets[i], *container_ptr_, scanMsg->header.stamp);
     }
 

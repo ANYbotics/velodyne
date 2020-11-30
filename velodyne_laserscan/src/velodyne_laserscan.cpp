@@ -78,7 +78,7 @@ void VelodyneLaserScan::recvCallback(const sensor_msgs::PointCloud2ConstPtr& msg
     }
     if (!found)
     {
-      ROS_ERROR("VelodyneLaserScan: Field 'ring' of type 'UINT16' not present in PointCloud2");
+      ROS_ERROR("Field 'ring' of type 'UINT16' not present in PointCloud2");
       return;
     }
     for (sensor_msgs::PointCloud2ConstIterator<uint16_t> it(*msg, "ring"); it != it.end(); ++it)
@@ -92,11 +92,11 @@ void VelodyneLaserScan::recvCallback(const sensor_msgs::PointCloud2ConstPtr& msg
     }
     if (ring_count_)
     {
-      ROS_INFO("VelodyneLaserScan: Latched ring count of %u", ring_count_);
+      ROS_INFO("Latched ring count of %u", ring_count_);
     }
     else
     {
-      ROS_ERROR("VelodyneLaserScan: Field 'ring' of type 'UINT16' not present in PointCloud2");
+      ROS_ERROR("Field 'ring' of type 'UINT16' not present in PointCloud2");
       return;
     }
   }
@@ -125,7 +125,7 @@ void VelodyneLaserScan::recvCallback(const sensor_msgs::PointCloud2ConstPtr& msg
     ring = cfg_.ring;
   }
 
-  ROS_INFO_ONCE("VelodyneLaserScan: Extracting ring %u", ring);
+  ROS_INFO_ONCE("Extracting ring %u", ring);
 
   // Load structure of PointCloud2
   int offset_x = -1;
@@ -211,7 +211,7 @@ void VelodyneLaserScan::recvCallback(const sensor_msgs::PointCloud2ConstPtr& msg
     }
     else
     {
-      ROS_WARN_ONCE("VelodyneLaserScan: PointCloud2 fields in unexpected order. Using slower generic method.");
+      ROS_WARN_ONCE("PointCloud2 fields in unexpected order. Using slower generic method.");
 
       if (offset_i >= 0)
       {
@@ -268,7 +268,7 @@ void VelodyneLaserScan::recvCallback(const sensor_msgs::PointCloud2ConstPtr& msg
   }
   else
   {
-    ROS_ERROR("VelodyneLaserScan: PointCloud2 missing one or more required fields! (x,y,ring)");
+    ROS_ERROR("PointCloud2 missing one or more required fields! (x,y,ring)");
   }
 }
 
