@@ -223,16 +223,20 @@ namespace velodyne_driver
                          << nbytes << " bytes");
       }
 
+    const double time2{ros::Time::now().toSec()};
+    const ros::Time timestamp_ros_clock{(time2 + time1) / 2.0 + time_offset};
     if (!gps_time_) {
       // Average the times at which we begin and end reading.  Use that to
       // estimate when the scan occurred. Add the time offset.
-      double time2 = ros::Time::now().toSec();
-      pkt->stamp = ros::Time((time2 + time1) / 2.0 + time_offset);
+      pkt->stamp = timestamp_ros_clock;
+      ROS_DEBUG("New packet received. ROS stamp %f s", timestamp_ros_clock.toSec());
     } else {
       // time for each packet is a 4 byte uint located starting at offset 1200 in
       // the data packet
       pkt->stamp = rosTimeFromGpsTimestamp(&(pkt->data[1200]));
+      ROS_DEBUG("New packet received. PPS stamp: %f s; ROS stamp %f s", pkt->stamp.toSec(), timestamp_ros_clock.toSec());
     }
+    ROS_DEBUG("Time delta between start and end of the reading %f s", time2-time1);
 
     return 0;
   }
