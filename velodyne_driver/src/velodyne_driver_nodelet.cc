@@ -57,6 +57,13 @@ public:
 
   ~DriverNodelet()
   {
+    // Support that nodelets are shut down smoothly. Explicit tear down of ROS infrastructure 
+    // ensures that nodelet threads leave ROS-time-dependent sleeps.
+    // Request shutdown of the ROS node.
+    ros::requestShutdown();
+    // Shut down ROS time.
+    ros::Time::shutdown();
+
     if (running_)
       {
         NODELET_INFO("shutting down driver thread");
