@@ -166,12 +166,12 @@ public:
     }
     catch (tf::LookupException& e)
     {
-      ROS_ERROR("%s", e.what());
+      ROS_ERROR_THROTTLE(5, "Tf lookup exception (Throttled 5s): %s", e.what());
       return false;
     }
     catch (tf::ExtrapolationException& e)
     {
-      ROS_ERROR("%s", e.what());
+      ROS_ERROR_THROTTLE(5, "Tf lookup extrapolation (Throttled 5s): %s", e.what());
       return false;
     }
 
