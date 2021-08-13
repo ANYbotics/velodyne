@@ -62,7 +62,7 @@ namespace velodyne_pointcloud
 
     // advertise output point cloud (before subscribing to input data)
     output_ =
-      node.advertise<sensor_msgs::PointCloud2>("velodyne_points", 10);
+      node.advertise<sensor_msgs::PointCloud2>("velodyne_points", 1);
 
     srv_ = boost::make_shared<dynamic_reconfigure::Server<TransformNodeConfig>> (private_nh);
     dynamic_reconfigure::Server<TransformNodeConfig>::CallbackType f;
@@ -96,7 +96,9 @@ namespace velodyne_pointcloud
     ROS_INFO_STREAM("Reconfigure request.");
     data_->setParameters(config.min_range, config.max_range,
                          config.view_direction, config.view_width);
-    config_.target_frame = tf::resolve(tf_prefix_, config.frame_id);
+    config_.fixed_frame = tf::resolve(tf_prefix_, config.fixed_frame);
+    config_.target_frame = tf::resolve(tf_prefix_, config.target_frame);
+    ROS_INFO_STREAM("Fixed frame ID now: " << config_.fixed_frame);
     ROS_INFO_STREAM("Target frame ID now: " << config_.target_frame);
     config_.min_range = config.min_range;
     config_.max_range = config.max_range;
@@ -141,17 +143,22 @@ namespace velodyne_pointcloud
     // allocate a point cloud with same time and frame ID as raw data
     container_ptr->setup(scanMsg);
 
+    const ros::Time referencePointCloudTime{scanMsg->packets[0].stamp};
     // process each packet provided by the driver
     for (size_t i = 0; i < scanMsg->packets.size(); ++i)
     {
       ROS_DEBUG_STREAM("Unpacking and transforming Lidar Data Packet Index: " << i);
-      container_ptr->computeTransformation(scanMsg->packets[i].stamp);
-      data_->unpack(scanMsg->packets[i], *container_ptr,  scanMsg->header.stamp);
+      container_ptr->computeTransformation(scanMsg->packets[i].stamp, referencePointCloudTime, scanMsg->header.frame_id);
+      data_->unpack(scanMsg->packets[i], *container_ptr,  referencePointCloudTime);
     }
-    // publish the accumulated cloud message
-    output_.publish(container_ptr->finishCloud());
 
-    diag_topic_->tick(scanMsg->header.stamp);
+    // reset transformation to de-skew packets.
+    container_ptr->resetTransformation();
+
+    // publish the accumulated cloud message
+    output_.publish(container_ptr->finishCloud(referencePointCloudTime));
+
+    diag_topic_->tick(referencePointCloudTime);
     diagnostics_.update();
   }
 

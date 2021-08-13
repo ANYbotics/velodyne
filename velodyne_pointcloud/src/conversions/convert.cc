@@ -142,7 +142,7 @@ namespace velodyne_pointcloud
     // publish the accumulated cloud message
     diag_topic_->tick(scanMsg->header.stamp);
     diagnostics_.update();
-    output_.publish(container_ptr_->finishCloud());
+    output_.publish(container_ptr_->finishCloud(scanMsg->header.stamp));
   }
 
 } // namespace velodyne_pointcloud

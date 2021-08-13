@@ -68,7 +68,7 @@ public:
     va_end(vl);
     cloud.point_step = offset;
     cloud.row_step = init_width * cloud.point_step;
-    if (config_.transform && !tf_ptr)
+    if (!tf_ptr)
     {
       tf_ptr = boost::shared_ptr<tf::TransformListener>(new tf::TransformListener);
     }
@@ -119,8 +119,9 @@ public:
                         const float intensity, const float time) = 0;
   virtual void newLine() = 0;
 
-  const sensor_msgs::PointCloud2& finishCloud()
+  const sensor_msgs::PointCloud2& finishCloud(const ros::Time& stamp)
   {
+    cloud.header.stamp = stamp;
     cloud.data.resize(cloud.point_step * cloud.width * cloud.height);
 
     if (!config_.target_frame.empty())
@@ -141,8 +142,7 @@ public:
     config_.fixed_frame = fixed_frame;
     config_.target_frame = target_frame;
 
-    config_.transform = fixed_frame.compare(target_frame) != 0;
-    if (config_.transform && !tf_ptr)
+    if (!tf_ptr)
     {
       tf_ptr = boost::shared_ptr<tf::TransformListener>(new tf::TransformListener);
     }
@@ -150,44 +150,44 @@ public:
 
   sensor_msgs::PointCloud2 cloud;
 
-  inline void vectorTfToEigen(tf::Vector3& tf_vec, Eigen::Vector3f& eigen_vec)
+  inline Eigen::Vector3f vectorTfToEigen(tf::Vector3& tf_vec)
   {
-    eigen_vec(0) = tf_vec[0];
-    eigen_vec(1) = tf_vec[1];
-    eigen_vec(2) = tf_vec[2];
+    return Eigen::Vector3f(tf_vec[0],  tf_vec[1],  tf_vec[2]);
   }
 
-  inline bool computeTransformation(const ros::Time& time)
+  inline bool computeTransformation(const ros::Time& packet_time, const ros::Time& reference_time, const std::string& sensor_frame_id)
   {
     tf::StampedTransform transform;
     try
     {
-      tf_ptr->lookupTransform(config_.target_frame, cloud.header.frame_id, time, transform);
+      tf_ptr->lookupTransform(config_.target_frame, reference_time, sensor_frame_id, packet_time, config_.fixed_frame, transform);
     }
     catch (tf::LookupException& e)
     {
       ROS_ERROR_THROTTLE(5, "Tf lookup exception (Throttled 5s): %s", e.what());
       return false;
     }
+    catch (tf::ConnectivityException& e)
+    {
+      ROS_ERROR_THROTTLE(5, "Tf connectivity exception (Throttled 5s): %s", e.what());
+      return false;
+    }
     catch (tf::ExtrapolationException& e)
     {
-      ROS_ERROR_THROTTLE(5, "Tf lookup extrapolation (Throttled 5s): %s", e.what());
+      ROS_ERROR_THROTTLE(5, "Tf lookup exception (Throttled 5s): %s", e.what());
       return false;
     }
 
-    tf::Quaternion quaternion = transform.getRotation();
-    Eigen::Quaternionf rotation(quaternion.w(), quaternion.x(), quaternion.y(), quaternion.z());
-
-    Eigen::Vector3f eigen_origin;
-    vectorTfToEigen(transform.getOrigin(), eigen_origin);
-    Eigen::Translation3f translation(eigen_origin);
+    const tf::Quaternion quaternion{transform.getRotation()};
+    const Eigen::Quaternionf rotation(quaternion.w(), quaternion.x(), quaternion.y(), quaternion.z());
+    const Eigen::Translation3f translation{vectorTfToEigen(transform.getOrigin())};
     transformation = translation * rotation;
     return true;
   }
 
   inline void transformPoint(float& x, float& y, float& z)
   {
-    Eigen::Vector3f p = transformation * Eigen::Vector3f(x, y, z);
+    const Eigen::Vector3f p{transformation * Eigen::Vector3f(x, y, z)};
     x = p.x();
     y = p.y();
     z = p.z();
@@ -198,10 +198,15 @@ public:
     return (range >= config_.min_range && range <= config_.max_range);
   }
 
+  inline void resetTransformation()
+  {
+    transformation.setIdentity();
+  }
+
 protected:
   Config config_;
   boost::shared_ptr<tf::TransformListener> tf_ptr;  ///< transform listener
-  Eigen::Affine3f transformation;
+  Eigen::Affine3f transformation{Eigen::Affine3f::Identity()};
 };
 } /* namespace velodyne_rawdata */
 #endif  // VELODYNE_POINTCLOUD_DATACONTAINERBASE_H
