@@ -169,12 +169,12 @@ public:
     }
     catch (tf::ConnectivityException& e)
     {
-      ROS_ERROR_THROTTLE(5, "Tf connectivity exception (Throttled 5s): %s", e.what());
+      ROS_DEBUG_THROTTLE(5, "Tf connectivity exception (Throttled 5s): %s", e.what());
       return false;
     }
     catch (tf::ExtrapolationException& e)
     {
-      ROS_ERROR_THROTTLE(5, "Tf lookup exception (Throttled 5s): %s", e.what());
+      ROS_DEBUG_THROTTLE(5, "Tf lookup exception (Throttled 5s): %s", e.what());
       return false;
     }
 
