@@ -16,6 +16,7 @@ add_message_files(
     VelodynePacket.msg
     VelodyneScan.msg
     VelodyneSyncStatus.msg
+    VelodyneInterfaceStatus.msg
 )
 generate_messages(
   DEPENDENCIES

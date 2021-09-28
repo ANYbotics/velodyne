@@ -43,6 +43,7 @@
 #include <nodelet/nodelet.h>
 
 #include "any_velodyne_driver/driver.h"
+#include "any_velodyne_msgs/VelodyneInterfaceStatus.h"
 
 namespace velodyne_driver
 {
@@ -80,14 +81,40 @@ private:
 
   volatile bool running_;               ///< device thread is running
   boost::shared_ptr<boost::thread> deviceThread_;
-
   boost::shared_ptr<VelodyneDriver> dvr_; ///< driver implementation class
+
+  void pubInterfaceStateTimerCb(const ros::WallTimerEvent& /*event*/);  // Publish the current state of the interface
+  void convertToRosMsg(uint8_t& interface_status, std::string& interface_status_msg);  // Converts State into any_velodyne_msgs::VelodyneInterfaceStatus compatible format
+
+  // Sensor interface state
+  enum State
+  {
+    NONE,
+    ERROR,
+    STOPPED,
+    DISCONNECTED,
+    CONNECTED,
+    STREAMING,
+    DEGRADED
+  };
+
+
+  // Interface diagnostics
+  std::atomic<State> interface_state {State::NONE};
+  ros::WallTimer interface_callback_timer;
+  ros::Publisher interface_status_pub;
 };
 
 void DriverNodelet::onInit()
 {
   // start the driver
   dvr_.reset(new VelodyneDriver(getNodeHandle(), getPrivateNodeHandle(), getName()));
+
+  // set up the interface status reporting
+  interface_callback_timer =
+      getNodeHandle().createWallTimer(ros::WallDuration(1.0), &DriverNodelet::pubInterfaceStateTimerCb, this, false, true);
+
+  interface_status_pub = getNodeHandle().advertise<any_velodyne_msgs::VelodyneInterfaceStatus>("lidar/interface_status", 1);
 
   // spawn device poll thread
   running_ = true;
@@ -105,10 +132,66 @@ void DriverNodelet::devicePoll()
       if (!running_)
       {
         ROS_ERROR_THROTTLE(1.0, "DriverNodelet::devicePoll - Failed to poll device.");
+        interface_state = State::ERROR;
         dvr_->resetConnectionToInput(getPrivateNodeHandle());
+      }
+      else{
+        interface_state = State::STREAMING;
       }
     }
   running_ = false;
+}
+
+/// Timer to publish the sensor interface state every 1s
+void DriverNodelet::pubInterfaceStateTimerCb(const ros::WallTimerEvent& /*event*/){
+  any_velodyne_msgs::VelodyneInterfaceStatus msg;
+  std::string interface_status_msg {};
+  uint8_t interface_status {0};
+  convertToRosMsg(interface_status, interface_status_msg);
+  msg.interface_status = interface_status;
+  msg.interface_status_message.data = interface_status_msg;
+  interface_status_pub.publish(msg);
+}
+
+
+/// Converts the current interface State into any_velodyne_msgs::VelodyneInterfaceStatus compatible format
+/// \param interface_status Interface status level
+/// \param interface_status_msg Additional feedback on the interface status
+void DriverNodelet::convertToRosMsg(uint8_t& interface_status, std::string& interface_status_msg) {
+  switch (interface_state.load()) {
+    case State::NONE:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::OK;
+      interface_status_msg = "Device communication not started yet";
+      break;
+    case State::ERROR:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::ERROR;
+      interface_status_msg = "Device communication error";
+      break;
+    case State::STOPPED:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::ERROR;
+      interface_status_msg = "Device communication stopped";
+      break;
+    case State::DISCONNECTED:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::ERROR;
+      interface_status_msg = "Device disconnected";
+      break;
+    case State::CONNECTED:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::OK;
+      interface_status_msg = "Device connected";
+      break;
+    case State::STREAMING:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::OK;
+      interface_status_msg = "Device started";
+      break;
+    case State::DEGRADED:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::WARN;
+      interface_status_msg = "Device communication degraded";
+      break;
+    default:
+      interface_status = any_velodyne_msgs::VelodyneInterfaceStatus::WARN;
+      interface_status_msg = "Unknown device connection state";
+      break;
+  }
 }
 
 } // namespace velodyne_driver
