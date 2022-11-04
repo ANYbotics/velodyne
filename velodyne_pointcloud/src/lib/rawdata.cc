@@ -461,6 +461,11 @@ inline float SQR(float val) { return val*val; }
 
     const raw_packet_t *raw = (const raw_packet_t *) &pkt.data[0];
 
+    /**
+     * The information from two Firing Sequences of 16 lasers is contained in one Data Block. Each Data Block contains 32(2*16) data points.
+     * Each packet contains the data from 24 firing sequences. Only one Azimuth is returned per Data Block.
+     */
+
     for (int block = 0; block < BLOCKS_PER_PACKET; block++) {
 
       // ignore packets with mangled or otherwise different contents

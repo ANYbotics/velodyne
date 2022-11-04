@@ -53,6 +53,16 @@ OrganizedCloudXYZIRT::OrganizedCloudXYZIRT(
      * To keep the right ordering, the filtered values are set to
      * NaN.
      */
+     /**
+      * This simply sorts the scan lines to the right order and sets values
+      * which are not in range to NaN, to maintain the organized structure. Neighbouring scan lines have to result in neighbouring points
+      * in the organized cloud. The feature is a great one, it is simple but enables a fast estimation of good point normals and also
+      * of surface reconstruction. This helps e.g. for robustness of registering point clouds and therefore for a more robust localization.
+      */
+    /**
+     * In the organized point cloud, horizontal neighbouring points (aligned in row) are the lidar points with close laser id and the same azimuth.
+     * Vertical neighbouring points (aligned in column) are the lidar points with close azimuth and the same laser id.
+     */
     if (pointInRange(distance))
     {
       if(config_.transform)
