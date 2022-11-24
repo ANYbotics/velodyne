@@ -177,14 +177,14 @@ void VelodyneDriver::resetConnectionToInput(ros::NodeHandle private_nh)
   // open Velodyne input device or file
   if (config_.dump_file != "")                  // have PCAP file?
     {
-      ROS_WARN_STREAM("  Velodyne driver constructor - Open File");
+      ROS_INFO_STREAM("  Velodyne driver constructor - Open File");
       // read data from packet capture file
       input_.reset(new velodyne_driver::InputPCAP(private_nh, config_.udp_port,
                                                   config_.packet_rate, config_.dump_file));
     }
   else
     {
-      ROS_WARN_STREAM("  Velodyne driver constructor - Open Device");
+      ROS_INFO_STREAM("  Velodyne driver constructor - Open Device");
       // read data from live socket
       input_.reset(new velodyne_driver::InputSocket(private_nh, config_.udp_port));
     }

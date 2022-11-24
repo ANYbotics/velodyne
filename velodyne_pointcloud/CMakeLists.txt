@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(any_velodyne_pointcloud)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -51,6 +51,7 @@ endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
 catkin_package(
   INCLUDE_DIRS
     include
+    ${EIGEN3_INCLUDE_DIR}
   LIBRARIES
     any_velodyne_rawdata
     any_velodyne_cloud_nodelet
