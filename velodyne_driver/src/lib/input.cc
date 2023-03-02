@@ -174,7 +174,7 @@ namespace velodyne_driver
             if (retval < 0)             // poll() error?
               {
                 if (errno != EINTR)
-                  ROS_ERROR("poll() error: %s", strerror(errno));
+                  ROS_ERROR_THROTTLE(60, "poll() error: %s", strerror(errno));
                 return -1;
               }
             if (retval == 0)            // poll() timeout?
