@@ -127,6 +127,8 @@ namespace velodyne_driver
       }
 
     ROS_DEBUG("Velodyne socket fd is %d\n", sockfd_);
+
+    private_nh.param("time_difference_threshold", timeDifferenceThreshold_, 0.02);
   }
 
   /** @brief destructor */
@@ -235,6 +237,11 @@ namespace velodyne_driver
       // the data packet
       pkt->stamp = rosTimeFromGpsTimestamp(&(pkt->data[1200]));
       ROS_DEBUG("New packet received. PPS stamp: %f s; ROS stamp %f s", pkt->stamp.toSec(), timestamp_ros_clock.toSec());
+      const auto timeDifference{(pkt->stamp - timestamp_ros_clock).toSec()};
+      if(abs(timeDifference) > timeDifferenceThreshold_) {
+        ROS_ERROR("Time difference between PPS and ROS clock is too high: %f s", timeDifference);
+        return -1;
+      }
     }
     ROS_DEBUG("Time delta between start and end of the reading %f s", time2-time1);
 
