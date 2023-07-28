@@ -239,7 +239,7 @@ namespace velodyne_driver
       ROS_DEBUG("New packet received. PPS stamp: %f s; ROS stamp %f s", pkt->stamp.toSec(), timestamp_ros_clock.toSec());
       const auto timeDifference{(pkt->stamp - timestamp_ros_clock).toSec()};
       if(abs(timeDifference) > timeDifferenceThreshold_) {
-        ROS_ERROR("Time difference between PPS and ROS clock is too high: %f s", timeDifference);
+        ROS_ERROR_THROTTLE(10, "Time difference between PPS and ROS clock is too high: %f s (Message is throttled at 10 sec.)", timeDifference);
         return -1;
       }
     }
