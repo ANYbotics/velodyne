@@ -240,7 +240,7 @@ namespace velodyne_driver
       const auto timeDifference{(pkt->stamp - timestamp_ros_clock).toSec()};
       if(abs(timeDifference) > timeDifferenceThreshold_) {
         ROS_ERROR_THROTTLE(10, "Time difference between PPS and ROS clock is too high: %f s (Message is throttled at 10 sec.)", timeDifference);
-        return -1;
+        // todo: use a counter + a timer to emit a fault.
       }
     }
     ROS_DEBUG("Time delta between start and end of the reading %f s", time2-time1);
