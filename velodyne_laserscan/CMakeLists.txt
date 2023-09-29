@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(any_velodyne_laserscan)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -46,7 +46,7 @@ add_library(${PROJECT_NAME}
 add_dependencies(${PROJECT_NAME}
   ${PROJECT_NAME}_gencfg
 )
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${YAML_CPP_LIBRARIES}
 )
