@@ -17,7 +17,6 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>any_velodyne_driver</exec_depend>
-  <exec_depend>any_velodyne_laserscan</exec_depend>
   <exec_depend>any_velodyne_msgs</exec_depend>
   <exec_depend>any_velodyne_pointcloud</exec_depend>
 
