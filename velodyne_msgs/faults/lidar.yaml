@@ -1,0 +1,12 @@
+package: any_velodyne_msgs
+lidar_driver_fault:
+  # An error occurred while trying to fetch data from the device.
+  - poll_device
+lidar_device_fault:
+  # Temperature of top board.
+  - high_temperature_top_board
+  # Temperature of bottom board.
+  - high_temperature_bottom_board
+transform_fault:
+  # Calibration file is invalid or cannot be found.
+  - load_calibration_file
