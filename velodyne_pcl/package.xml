@@ -4,8 +4,8 @@
   <version>1.5.26</version>
   <description>The velodyne_pcl package</description>
 
-  <maintainer email="ynava@anybotics.com">Yoshua Nava</maintainer>
-  <maintainer email="mwulf@anybotics.com">Maximilian Wulf</maintainer>
+  <maintainer email="lbergmann@anybotics.com">Lukas Bergmann</maintainer>
+  <maintainer email="dlopez@anybotics.com">Daniel López Madrid</maintainer>
   <author email="ynava@anybotics.com">Yoshua Nava</author>
   <author>Sebastian Pütz</author>
 
@@ -17,7 +17,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 <!--   <build_depend>cmake_clang_tools</build_depend> -->
-  
+
   <depend>pcl_ros</depend>
 
 <!--   <test_depend>cmake_code_coverage</test_depend> -->

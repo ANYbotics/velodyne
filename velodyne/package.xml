@@ -5,8 +5,8 @@
   <description>
     Basic ROS support for the Velodyne 3D LIDARs.
   </description>
-  <maintainer email="ynava@anybotics.com">Yoshua Nava</maintainer>
-  <maintainer email="mwulf@anybotics.com">Maximilian Wulf</maintainer>
+  <maintainer email="lbergmann@anybotics.com">Lukas Bergmann</maintainer>
+  <maintainer email="dlopez@anybotics.com">Daniel López Madrid</maintainer>
   <author email="ynava@anybotics.com">Yoshua Nava</author>
   <author>Jack O'Quin</author>
   <license>BSD</license>
